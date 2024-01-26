@@ -59,7 +59,4 @@ This project focuses on understanding processes and signals in Linux. By the end
 Ensure that all Bash scripts are created and organized appropriately. Make sure they are executable and pass Shellcheck without errors. The `README.md` file should provide a comprehensive overview of the project, its requirements, and the learning objectives.
 
 ## Author
-
-[Zerihun Shiferaw]
-
-[https://github.com/Zed-bard/alx-system_engineering-devops]
+[**Zerihun Shiferaw**](https://github.com/Zed-bard/alx-system_engineering-devops)
