@@ -1,6 +1,6 @@
 # Secured and Monitored Web Infrastructure
 
-![Image of a secured and monitored infrastructure](https://imgur.com/atbVKWR)
+![Image of a secured and monitored infrastructure](https://i.imgur.com/atbVKWR.jpg)
 
 ## Description
 
