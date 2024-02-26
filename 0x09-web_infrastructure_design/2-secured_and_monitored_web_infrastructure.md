@@ -1,7 +1,6 @@
 # Secured and Monitored Web Infrastructure
 
-![https://imgur.com/atbVKWR]( 
-![https://imgur.com/atbVKWR])
+![Image of a secured and monitored infrastructure](https://imgur.com/atbVKWR)
 
 ## Description
 
@@ -28,3 +27,5 @@ The presence of a single MySQL server poses scalability challenges and introduce
 
 ### Uniform Server Components
 Utilizing servers with identical components may lead to resource contention issues, such as competition for CPU, memory, and I/O. This contention can result in poor performance and difficulty in pinpointing the source of problems. A more scalable and efficient setup involves diversified components and resource allocation, ensuring optimal server performance and easier scalability.
+
+
