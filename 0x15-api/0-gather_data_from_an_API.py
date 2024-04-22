@@ -1,52 +1,39 @@
 #!/usr/bin/python3
-""" Script to get TODO list progress
-    by employee ID
-"""
-from requests import get
-from sys import argv
+import requests
+import sys
 
+def get_employee_progress(employee_id):
+    # Base URL for the API
+    api_url = "https://jsonplaceholder.typicode.com"
 
-def todo(emp_id):
-    """ Send request for employee's
-        to do list to API
-    """
-    total = 0
-    completed = 0
-    url_user = 'https://jsonplaceholder.typicode.com/users/'
-    url_todo = 'https://jsonplaceholder.typicode.com/todos/'
+    # Get the user data
+    user_url = f"{api_url}/users/{employee_id}"
+    user_response = requests.get(user_url)
+    user_data = user_response.json()
 
-    # Check if user exists
-    user_response = get(url_user + emp_id)
-    if user_response.status_code != 200:
-        print("Error: Employee ID not found or API request failed")
-        return
-    user = user_response.json().get('name')
+    # Get the TODO list for the user
+    todos_url = f"{api_url}/todos?userId={employee_id}"
+    todos_response = requests.get(todos_url)
+    todos_data = todos_response.json()
 
-    if user:
-        params = {'userId': emp_id}
-        #  get all tasks
-        tasks_response = get(url_todo, params=params)
-        if tasks_response.status_code != 200:
-            print("Error: Failed to fetch TODO list")
-            return
-        tasks = tasks_response.json()
-        if tasks:
-            total = len(tasks)
-            #  get number of completed tasks
-            params.update({'completed': 'true'})
-            completed = len(get(url_todo, params=params).json())
+    # Calculate progress
+    total_tasks = len(todos_data)
+    completed_tasks = sum(task['completed'] for task in todos_data)
 
-        # Adjust employee name if it's too long
-        if len(user) > 18:
-            user = user[:15] + "..."
-        print("Employee Name: {} is done with tasks({}/{}):".format(
-            user, completed, total))
-        for task in tasks:
-            if task.get('completed') is True:
-                print("\t {}".format(task.get('title')))
+    # Print out the employee progress
+    print(f"Employee {user_data['name']} is done with tasks({completed_tasks}/{total_tasks}):")
 
+    # Print out the titles of completed tasks
+    for task in todos_data:
+        if task['completed']:
+            print(f"\t {task['title']}")
 
-if __name__ == '__main__':
-    if len(argv) > 1:
-        todo(argv[1])
-
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        try:
+            employee_id = int(sys.argv[1])
+            get_employee_progress(employee_id)
+        except ValueError:
+            print("Please provide a valid integer for the employee ID.")
+    else:
+        print("Usage: python3 script.py <employee_id>")
