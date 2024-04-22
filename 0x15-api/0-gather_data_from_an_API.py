@@ -1,40 +1,40 @@
 #!/usr/bin/python3
+""" Script to get TODO list progress
+    by employee ID
 """
-    using a REST API, for a given employee ID
-    returns information about his/her TODO list progress
-"""
-import requests
-import sys
+from requests import get
+from sys import argv
 
-def get_employee_todo_progress(employee_id):
-    base_url = "https://jsonplaceholder.typicode.com"
-    user_url = f"{base_url}/users/{employee_id}"
-    todos_url = f"{base_url}/todos?userId={employee_id}"
 
-    # Fetch user data
-    user_response = requests.get(user_url)
-    user_data = user_response.json()
-    employee_name = user_data['name']
+def todo(emp_id):
+    """ Send request for employee's
+        to do list to API
+    """
+    total = 0
+    completed = 0
+    url_user = 'https://jsonplaceholder.typicode.com/users/'
+    url_todo = 'https://jsonplaceholder.typicode.com/todos/'
 
-    # Fetch todos data
-    todos_response = requests.get(todos_url)
-    todos_data = todos_response.json()
+    # check if user exists
+    user = get(url_user + emp_id).json().get('name')
 
-    # Calculate progress
-    total_tasks = len(todos_data)
-    done_tasks = sum(1 for todo in todos_data if todo['completed'])
+    if user:
+        params = {'userId': emp_id}
+        #  get all tasks
+        tasks = get(url_todo, params=params).json()
+        if tasks:
+            total = len(tasks)
+            #  get number of completed tasks
+            params.update({'completed': 'true'})
+            completed = len(get(url_todo, params=params).json())
 
-    # Print progress
-    print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
-    for todo in todos_data:
-        if todo['completed']:
-            print(f"\t{todo['title']}")
+        print("Employee {} is done with tasks({}/{}):".format(
+            user, completed, total))
+        for task in tasks:
+            if task.get('completed') is True:
+                print("\t {}".format(task.get('title')))
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
 
-    employee_id = int(sys.argv[1])
-    get_employee_todo_progress(employee_id)
-
+if __name__ == '__main__':
+    if len(argv) > 1:
+        todo(argv[1])
