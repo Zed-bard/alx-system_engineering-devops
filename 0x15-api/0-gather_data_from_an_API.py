@@ -15,20 +15,31 @@ def todo(emp_id):
     url_user = 'https://jsonplaceholder.typicode.com/users/'
     url_todo = 'https://jsonplaceholder.typicode.com/todos/'
 
-    # check if user exists
-    user = get(url_user + emp_id).json().get('name')
+    # Check if user exists
+    user_response = get(url_user + emp_id)
+    if user_response.status_code != 200:
+        print("Error: Employee ID not found or API request failed")
+        return
+    user = user_response.json().get('name')
 
     if user:
         params = {'userId': emp_id}
         #  get all tasks
-        tasks = get(url_todo, params=params).json()
+        tasks_response = get(url_todo, params=params)
+        if tasks_response.status_code != 200:
+            print("Error: Failed to fetch TODO list")
+            return
+        tasks = tasks_response.json()
         if tasks:
             total = len(tasks)
             #  get number of completed tasks
             params.update({'completed': 'true'})
             completed = len(get(url_todo, params=params).json())
 
-        print("Employee {} is done with tasks({}/{}):".format(
+        # Adjust employee name if it's too long
+        if len(user) > 18:
+            user = user[:15] + "..."
+        print("Employee Name: {} is done with tasks({}/{}):".format(
             user, completed, total))
         for task in tasks:
             if task.get('completed') is True:
@@ -38,3 +49,4 @@ def todo(emp_id):
 if __name__ == '__main__':
     if len(argv) > 1:
         todo(argv[1])
+
