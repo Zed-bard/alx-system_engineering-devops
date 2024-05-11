@@ -1,6 +1,8 @@
 # Postmortem: Integration of DataDog with Project 0x18 Webstack Monitoring
 
+
 **Date: [5/11/2024]**
+![Datadog](https://github.com/Zed-bard/alx-system_engineering-devops/assets/132649828/b56ef36c-1bd0-4994-b5fc-5032618b91e7)
 
 **Introduction:**
 The integration of DataDog with Project 0x18 Webstack Monitoring presented both technical challenges and valuable learning opportunities. This postmortem aims to dissect the incident, identify key lessons learned, and outline strategies for improvement.
